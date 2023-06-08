@@ -1,5 +1,9 @@
+variable "subscription_id" {
+    description = "Azure subscription id"
+}
+
 variable "rg_name" {
-    description = "value"
+    description = "Name of the resource group where resources are provisioned"
     type = string
     default = "rg-gavb-workshop-databricks"
 }
@@ -10,9 +14,9 @@ variable "location" {
     default = "West Europe"
 }
 
-variable "databricks_workspace_name" {
-    description = "Name of Databricks workspace"
-    type = string
+variable "databricks_workspace_names" {
+    description = "Names of Databricks workspaces to be assigned to metastore"
+    type = list(string)
 }
 
 variable "metastore_storage_name" {
@@ -23,4 +27,20 @@ variable "metastore_storage_name" {
 variable "access_connector_name" {
     description = "Name of the access connector used to create storage credentials"
     type = string
+}
+
+variable "rawbronze_storage_account" {
+    description = "Name of the storage account for the raw and bronze layers"
+    type = string
+}
+
+variable "silvergold_storage_account" {
+    description = "Name of the storage account for the silver and gold layers"
+    type = string
+}
+
+variable "container_name" {
+    description = "Name of the container to be created"
+    type = string
+    default = "defaultmanaged"
 }

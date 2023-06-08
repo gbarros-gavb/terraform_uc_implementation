@@ -1,5 +1,6 @@
 variable "subscription_id" {
     description = "Azure subscription id"
+    default = "4832a206-d0dd-4491-93a6-c7b77dc99dda"
 }
 
 variable "rg_name" {
@@ -14,16 +15,15 @@ variable "location" {
     default = "West Europe"
 }
 
-variable "databricks_workspace_names" {
+variable "databricks_workspace_name" {
     description = "Names of Databricks workspaces to be assigned to metastore"
-    type = list(string)
-}
-
-variable "metastore_storage_name" {
-    description = "Name of the storage account for Unity Catalog metastore"
     type = string
 }
 
+variable "metastore_name" {
+    description = "Name of the metastore"
+    type = string
+}
 variable "access_connector_name" {
     description = "Name of the access connector used to create storage credentials"
     type = string

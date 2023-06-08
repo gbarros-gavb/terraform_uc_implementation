@@ -12,14 +12,21 @@ terraform {
 
 # Provisioning of Azure resources
 provider "azurerm" {
+    skip_provider_registration = true
+    subscription_id = var.subscription_id
     features {}
 }
 
 ## Creating the default managed container
 
 ### Referencing the existing storage account resources
-data "azurerm_storage_account" "storage_accounts" {
-    name_starts_with = "brewdatgb"
+data "azurerm_storage_account" "silvergold_storage_account" {
+    name = var.silvergold_storage_account
+    resource_group_name = var.rg_name
+}
+
+data "azurerm_storage_account" "rawbronze_storage_account" {
+    name = var.rawbronze_storage_account
     resource_group_name = var.rg_name
 }
 
@@ -44,9 +51,14 @@ resource "azurerm_databricks_access_connector" "access_connector" {
 }
 
 ### Assigning permissions to storage accounts
-resource "azurerm_role_assignment" "mi_data_contributr" {
-    for_each = data.azurerm_storage_account.storage_accounts
-    scope = each.value.id
+resource "azurerm_role_assignment" "mi_data_contributor_slvgld" {
+    scope = data.azurerm_storage_account.silvergold_storage_account.id
+    role_definition_name = "Storage Blob Data Contributor"
+    principal_id = azurerm_databricks_access_connector.access_connector.identity[0].principal_id
+}
+
+resource "azurerm_role_assignment" "mi_data_contributor_rawbrz" {
+    scope = data.azurerm_storage_account.rawbronze_storage_account.id
     role_definition_name = "Storage Blob Data Contributor"
     principal_id = azurerm_databricks_access_connector.access_connector.identity[0].principal_id
 }
